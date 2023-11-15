@@ -7,28 +7,6 @@ npm install -D vitepress-plugin-recursive-sidebar
 ```
 
 
-# API
-
-## getSideBar
-
-```javascript
-getSideBar(rootDir = './', options?: Options)
-```
-
-- **rootDir**:  `string` Directory to get configuration for
-- **options**: `Options` Option to create configuration
-
-Returns `sidebar` configuration for VitePress calculated using structrue of directory and files in given path.
-
-Type of Options:
-
-```typescript
-interface Options {
-  ignoreMDFiles?: Array<string>, // File path to ignore from being captured.
-}
-```
-
-
 
 
 # How it works
@@ -50,7 +28,9 @@ You directory may be like this.
 │  └─ index.md
 ```
 
-Go to `config.ts` and add the following:
+# Usage
+
+Go to `config.ts` and do the following:
 
 ```typescript
 import { getSideBar } from 'vitepress-plugin-recursive-sidebar'
@@ -82,4 +62,77 @@ You should do this for each page, so in our case for:
 - `big_site_section/index.md`
 - `another_big_site_section/index.md`
 - `yet_another_big_site_section/index.md`
+
+
+
+
+
+
+# API
+
+## getSideBar
+
+```javascript
+getSideBar(rootDir = './', options?: Options)
+```
+
+- **rootDir**:  `string` Directory to get configuration for
+- **options**: `Options` Option to create configuration
+
+Returns `sidebar` configuration for VitePress calculated using structrue of directory and files in given path.
+
+Type of Options:
+
+```typescript
+interface Options {
+  ignoreMDFiles?: Array<string>, // File path to ignore from being captured.
+}
+```
+
+
+## Generator sidebar
+
+- [x] Then `getSideBar` will return sidebar data like this. It will work well for vitepress.
+- [x] Sidebar will order by file path.
+
+- [x] Number in the file path will be removed.
+
+
+```json
+[
+    {
+        "text":"Introduction",
+        "items":[
+            {
+                "text":"START",
+                "link":"01.Introduction/START"
+            }
+        ]
+    },
+    {
+        "text":"Utils",
+        "items":[
+            {
+                "text":"dateUtil",
+                "link":"02.Utils/dateUtil"
+            },
+            {
+                "text":"storeUtil",
+                "link":"02.Utils/storeUtil"
+            }
+        ]
+    },
+    {
+        "text":"Index",
+        "items":[
+            {
+                "text":"Index",
+                "link":"index"
+            }
+        ]
+    }
+]
+```
+
+[The configuration for the sidebar in Vitepress](https://vitepress.vuejs.org/config/theme-configs#sidebar)
 

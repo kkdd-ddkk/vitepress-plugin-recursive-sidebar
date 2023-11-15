@@ -23,8 +23,7 @@ interface SidebarItem {
 }
 
 interface Options {
-  ignoreDirectory?: Array<string>, // Directoty path to ignore from being captured.
-  ignoreMDFiles?: Array<string>, // File path to ignore from being captured.
+  ignoreMDFiles?: Array<string>, // File path to ignore rom being captured.
 }
 
 // handle md file name
@@ -73,10 +72,6 @@ function side(baseDir: string, options?: Options) {
   // strip number of folder's name
   mdFiles.forEach((item) => {
     const dirName = getDirName(item);
-    if (options?.ignoreDirectory?.length
-      && options?.ignoreDirectory.findIndex(item => getDirName(item) === dirName) !== -1) {
-      return;
-    }
     const mdFileName = getName(item);
     const sidebarItemIndex = sidebars.findIndex(sidebar => sidebar.text === dirName);
     if (sidebarItemIndex !== -1) {
@@ -100,7 +95,7 @@ function side(baseDir: string, options?: Options) {
 }
 
 /**
- * Returns `sidebar` configuration for VitePress calculated using structure of directory and files in given path.
+ * Returns `sidebar` configuration for VitePress calculated using structrue of directory and files in given path.
  * @param   {String}    rootDir   - Directory to get configuration for.
  * @param   {Options}    options   - Option to create configuration.
  */

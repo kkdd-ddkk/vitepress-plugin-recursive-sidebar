@@ -16,11 +16,10 @@
     const { readdirSync, readFileSync } = require("fs");
     const matter = require("gray-matter");
     
-    function getFrontMatterSync(filepath) {
+    function getFrontMatterTitleSync(filepath) {
         const { data: frontMatter, content } = matter( readFileSync(filepath));
-        return frontMatter;
+        return frontMatter.title;
     }
-    
     
     function sideSync(dir, isRoot=true)
     {
@@ -30,33 +29,35 @@
         {
             return {};
         }
-        var sidebar={};
+        
+        
+        var sidebar= {};
+        var result = [];
     
-        var frontMatter = getFrontMatterSync(`${dir}/index.md`);
-        sidebar.text= frontMatter.title;
+
+        sidebar.text= getFrontMatterTitleSync(`${dir}/index.md`);
+        sidebar.link = dir + "/index.md";
         // sidebar.collapsible = isRoot;
         // sidebar.collapsed = isRoot;
-        sidebar.items = []
-        if (frontMatter.isSidebarRoot) {
-            sidebar.items.push ( { 'text': 'Home', 'link':`${dir}/`});
-        }
+        sidebar.items = [];
+        
+        result.push(sidebar);
 
-
-    
         for (const f of filenames.filter((e) => e.name !== 'index.md' )) // .filter((f) => f.name.endsWith(".md") || (!f.name.startsWith(".") && f.isDirectory())))
         {
-            var fname = `${dir}/${f.name}`;
             if (f.name.endsWith(".md") )
             {
-                sidebar.items.push( { 'text':  getFrontMatterSync(`${fname}`).title, 'link': `${fname}` });
+                var fname = `${dir}/${f.name}`;
+                sidebar.items.push( { 'text':  getFrontMatterTitleSync(`${dir}/${f.name}`), 'link': `${f.name}` });
             }
             else if (!f.name.startsWith(".") && f.isDirectory())
             {
-                sidebar.items.push (sideSync(`${fname}`));
+                var subsidebar = sideSync(`${dir}/${f.name}`);
+                result = [...result, ...subsidebar];
             }
         }
 
-        return sidebar;
+        return result;
     }
     
 
@@ -70,16 +71,13 @@
      * @param   {String}    rootDir   - Directory to get configuration for.
      * @param   {Options}    options   - Option to create configuration.
      */
-    var getSideBar = function (rootDir, subdir, options) {
+    var getSideBar = function (rootDir, options) {
         if (rootDir === void 0) { rootDir = './'; }
         
-        process.chdir(rootDir);
-        var sidebar =  sideSync(subdir);
-        console.info (`RETURNING SIDEBAR FOR ${subdir}:`);
+        var sidebar =  sideSync(rootDir);
+        console.info (`RETURNING SIDEBAR FOR ${rootDir}:`);
         console.log (sidebar);
-        process.chdir("..");
-
-        return [sidebar];
+        return sidebar;
     };
     exports.getSideBar = getSideBar;
 
