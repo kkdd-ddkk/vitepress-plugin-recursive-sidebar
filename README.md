@@ -2,11 +2,7 @@ Recursive sidebar generator for [Vitepress](https://github.com/vuejs/vitepress) 
 
 # Install
 
-```shell
-npm install -D vitepress-plugin-recursive-sidebar
-```
-
-
+Not yet a published Node package.
 
 
 # How it works
